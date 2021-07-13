@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/assets/css/bootstrap/bootstrap.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="/assets/css/style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-header bg-dark text-white">
+            <h5 class="text-center">Registre su contacto</h5>
+          </div>
+          <div class="card-body">
+            <div class="card-title">
+              <h5 class="text-center">Complete toda la informacion</h5>
+            </div>
+
+            <div class="mb-3">
+              <label for="name" class="form-label">Nombre: </label>
+              <input type="text" class="form-control" id="name" />
+            </div>
+
+            <div class="mb-3">
+              <label for="phone" class="form-label">Telefono: </label>
+              <input type="text" class="form-control" id="phone" />
+            </div>
+
+            <div class="mb-3">
+              <label for="contact-type" class="form-label"
+                >Tipo de contacto:
+              </label>
+              <select class="form-select" id="contact-type">
+                <option value="">Seleccione una opcion</option>
+                <option value="Academico">Academico</option>
+                <option value="Personal">Personal</option>
+                <option value="Profesional">Profesional</option>
+              </select>
+            </div>
+
+            <button type="button" onclick="CreateContactElement()" class="btn btn-outline-primary float-end">
+              Guardar
+            </button>
+
+            <button type="button" onclick="Clear()" class="btn btn-outline-warning float-end mr-1">
+              Limpiar
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4"></div>
+    </div>
+
+    <div class="row" id="contact-container">
+
+    <!--     <div class="col-md-4 mt-4">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title">Contacto - Academico</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Nombre: Leo</li>
+                        <li class="list-group-item">Telefono: 1234</li>
+                    </ul>
+
+                    <button class="btn btn-outline-danger float-end">Eliminar</button>
+                </div>
+            </div>
+        </div> -->
+
+    </div>
+
+  </body>
+  <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
+  <script src="/assets/js/index/index.js"></script>
+
+</html>
