@@ -14,8 +14,9 @@
             <p class="product__description">{{this.description}}</p>
           </div>
           <div class="card__actions">
-            <form action="/add-cart" method="post">
-              <button class="btn">Add to Cart</button>
+            <form action="/cart" method="post">
+              <button class="btn" type="submit">Add to Cart</button>
+              <input type="hidden" name="productId" value="{{this.id}}" />
             </form>
           </div>
         </article>

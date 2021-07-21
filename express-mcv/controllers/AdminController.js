@@ -1,7 +1,7 @@
 const Product = require("../models/Product");
 
 exports.GetAddProduct = (req, res, next) => {
-  res.render("admin/add-product", {
+  res.render("admin/save-product", {
     pageTitle: "Add product",
     AddProductActive: true,
     ProductCSS: true,
@@ -32,11 +32,18 @@ exports.GetAdminProducts = (req, res, next) => {
 };
 
 exports.EditProduct = (req, res, next) => {
-    res.render("admin/edit-product", {
-      pageTitle: "edit product",    
-      ProductCSS: true,
-      formCSS: true,
-    });
+  const productId = req.params.productId;
+  const edit = req.query.edit;
+ 
+  if (!edit) {
+    return res.redirect("/");
+  }
+  res.render("admin/save-product", {
+    pageTitle: "edit product",
+    ProductCSS: true,
+    formCSS: true,
+    editMode: edit
+  });
 };
 
 exports.DeleteProduct = (req, res, next) => {
