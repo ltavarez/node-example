@@ -29,3 +29,13 @@ exports.GetProducts = (req, res, next) => {
 exports.GetCheckout = (req, res, next) => {
   res.render("shop/checkout", { CartActive: true, pageTitle: "Checkout page" });
 };
+
+exports.GetOrders = (req, res, next) => {
+  res.render("shop/orders", { OrdersActive: true, pageTitle: "Orders page" });
+};
+
+
+
+exports.AddCart = (req, res, next) => {
+  res.redirect("/");
+};

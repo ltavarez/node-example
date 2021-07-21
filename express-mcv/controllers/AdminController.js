@@ -30,3 +30,15 @@ exports.GetAdminProducts = (req, res, next) => {
     });
   });
 };
+
+exports.EditProduct = (req, res, next) => {
+    res.render("admin/edit-product", {
+      pageTitle: "edit product",    
+      ProductCSS: true,
+      formCSS: true,
+    });
+};
+
+exports.DeleteProduct = (req, res, next) => {
+  res.redirect("/admin/products");
+};
