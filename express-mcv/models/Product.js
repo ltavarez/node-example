@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const Cart = require("./Cart");
 
 const dataPath = path.join(
   path.dirname(require.main.filename),
@@ -18,7 +19,8 @@ const GetAllProductsFromFile = function (cb) {
 };
 
 module.exports = class Product {
-  constructor(title, imageUrl, price, description) {
+  constructor(id, title, imageUrl, price, description) {
+    this.id = id;
     this.title = title;
     this.imageUrl = imageUrl;
     this.price = price;
@@ -26,12 +28,23 @@ module.exports = class Product {
   }
 
   Save() {
-    this.id = Math.random().toString();
     GetAllProductsFromFile((products) => {
-      products.push(this);
-      fs.writeFile(dataPath, JSON.stringify(products), function (error) {
-        console.log(error);
-      });
+      if (this.id) {
+        const existingProduct = products.findIndex(
+          (prod) => prod.id === this.id
+        );
+
+        products[existingProduct] = this;
+        fs.writeFile(dataPath, JSON.stringify(products), function (error) {
+          console.log(error);
+        });
+      } else {
+        this.id = Math.random().toString();
+        products.push(this);
+        fs.writeFile(dataPath, JSON.stringify(products), function (error) {
+          console.log(error);
+        });
+      }
     });
   }
 
@@ -39,9 +52,19 @@ module.exports = class Product {
     GetAllProductsFromFile(cb);
   }
 
-  static GetById(id,cb) {
-    GetAllProductsFromFile(products=>{
-      const product = products.find(p => p.id === id);
+  static Delete(id) {
+    GetAllProductsFromFile((products) => {
+      const product = products.find((prod) => prod.id === id);
+      const newProductsList = products.filter((p) => p.id !== id);
+      fs.writeFile(dataPath, JSON.stringify(newProductsList), function (error) {
+        Cart.deleteProduct(id, product.price);
+      });
+    });
+  }
+
+  static GetById(id, cb) {
+    GetAllProductsFromFile((products) => {
+      const product = products.find((p) => p.id === id);
       cb(product);
     });
   }

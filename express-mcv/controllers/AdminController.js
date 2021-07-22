@@ -6,6 +6,7 @@ exports.GetAddProduct = (req, res, next) => {
     AddProductActive: true,
     ProductCSS: true,
     formCSS: true,
+    editMode: false,
   });
 };
 
@@ -15,7 +16,7 @@ exports.PostAddProduct = (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
 
-  const product = new Product(title, imageUrl, price, description);
+  const product = new Product(null, title, imageUrl, price, description);
   product.Save();
   res.redirect("/");
 };
@@ -31,21 +32,41 @@ exports.GetAdminProducts = (req, res, next) => {
   });
 };
 
-exports.EditProduct = (req, res, next) => {
+exports.GetEditProduct = (req, res, next) => {
   const productId = req.params.productId;
   const edit = req.query.edit;
- 
+
   if (!edit) {
     return res.redirect("/");
   }
-  res.render("admin/save-product", {
-    pageTitle: "edit product",
-    ProductCSS: true,
-    formCSS: true,
-    editMode: edit
+
+  Product.GetById(productId, (product) => {
+    res.render("admin/save-product", {
+      pageTitle: "edit product",
+      ProductCSS: true,
+      formCSS: true,
+      editMode: edit,
+      product: product,
+    });
   });
 };
 
-exports.DeleteProduct = (req, res, next) => {
+exports.PostEditProduct = (req, res, next) => {
+  const id = req.body.productId;
+  const title = req.body.title;
+  const imageUrl = req.body.imageUrl;
+  const price = req.body.price;
+  const description = req.body.description;
+
+  const product = new Product(id, title, imageUrl, price, description);
+  product.Save();
+
   res.redirect("/admin/products");
+};
+
+exports.DeleteProduct = (req, res, next) => {
+   const id = req.body.productId;
+   Product.Delete(id);
+   res.redirect("/admin/products");
+
 };
