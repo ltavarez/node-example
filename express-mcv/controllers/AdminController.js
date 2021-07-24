@@ -22,14 +22,18 @@ exports.PostAddProduct = (req, res, next) => {
 };
 
 exports.GetAdminProducts = (req, res, next) => {
-  Product.GetAll(function (products) {
-    res.render("admin/product-list", {
-      pageTitle: "Admin products",
-      prods: products,
-      AdminProductsActive: true,
-      hasProducts: products.length > 0,
+  Product.GetAll()
+    .then(([rows, fieldData]) => {
+      res.render("admin/product-list", {
+        pageTitle: "Admin products",
+        prods: rows,
+        AdminProductsActive: true,
+        hasProducts: rows.length > 0,
+      });
+    })
+    .catch((error) => {
+      console.log(error);
     });
-  });
 };
 
 exports.GetEditProduct = (req, res, next) => {
@@ -40,15 +44,19 @@ exports.GetEditProduct = (req, res, next) => {
     return res.redirect("/");
   }
 
-  Product.GetById(productId, (product) => {
-    res.render("admin/save-product", {
-      pageTitle: "edit product",
-      ProductCSS: true,
-      formCSS: true,
-      editMode: edit,
-      product: product,
+  Product.GetById(productId)
+    .then(([product]) => {
+      res.render("admin/save-product", {
+        pageTitle: "edit product",
+        ProductCSS: true,
+        formCSS: true,
+        editMode: edit,
+        product: product[0],
+      });
+    })
+    .catch((err) => {
+      console.log(err);
     });
-  });
 };
 
 exports.PostEditProduct = (req, res, next) => {
@@ -59,14 +67,23 @@ exports.PostEditProduct = (req, res, next) => {
   const description = req.body.description;
 
   const product = new Product(id, title, imageUrl, price, description);
-  product.Save();
-
-  res.redirect("/admin/products");
+  product
+    .Save()
+    .then(() => {
+      res.redirect("/admin/products");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 exports.DeleteProduct = (req, res, next) => {
-   const id = req.body.productId;
-   Product.Delete(id);
-   res.redirect("/admin/products");
-
+  const id = req.body.productId;
+  Product.Delete(id)
+    .then(() => {
+      res.redirect("/admin/products");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };

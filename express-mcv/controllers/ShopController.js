@@ -2,14 +2,18 @@ const Product = require("../models/Product");
 const Cart = require("../models/Cart");
 
 exports.GetIndex = (req, res, next) => {
-  Product.GetAll(function (products) {
-    res.render("shop/index", {
-      pageTitle: "Home page",
-      shopActive: true,
-      prods: products,
-      hasProducts: products.length > 0,
+  Product.GetAll()
+    .then(([rows, fieldData]) => {
+      res.render("shop/index", {
+        pageTitle: "Home page",
+        shopActive: true,
+        prods: rows,
+        hasProducts: rows.length > 0,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
     });
-  });
 };
 
 exports.GetCart = (req, res, next) => {
@@ -46,25 +50,33 @@ exports.PostCart = (req, res, next) => {
 };
 
 exports.GetProducts = (req, res, next) => {
-  Product.GetAll(function (products) {
-    res.render("shop/product-list", {
-      prods: products,
-      hasProducts: products.length > 0,
-      ProductsActive: true,
-      pageTitle: "Products page",
+  Product.GetAll()
+    .then(([rows, fieldData]) => {
+      res.render("shop/product-list", {
+        prods: rows,
+        hasProducts: rows.length > 0,
+        ProductsActive: true,
+        pageTitle: "Products page",
+      });
+    })
+    .catch((err) => {
+      console.log(err);
     });
-  });
 };
 
 exports.GetProduct = (req, res, next) => {
   const prodId = req.params.productId;
-  Product.GetById(prodId, (product) => {
-    res.render("shop/product-detail", {
-      prod: product,
-      pageTitle: product.title,
-      ProductsActive: true,
+  Product.GetById(prodId)
+    .then(([product]) => {
+      res.render("shop/product-detail", {
+        prod: product[0],
+        pageTitle: product[0].title,
+        ProductsActive: true,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
     });
-  });
 };
 exports.postCartDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
