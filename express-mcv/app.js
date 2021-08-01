@@ -7,6 +7,10 @@ const adminRouter = require("./routes/admin");
 const shopRouter = require("./routes/shop");
 const errorController = require("./controllers/ErrorController");
 
+const sequelize = require("./util/database");
+const Product = require("./models/Product");
+const User = require("./models/User");
+
 app.engine(
   "hbs",
   expressHbs({
@@ -31,4 +35,14 @@ app.use(shopRouter);
 
 app.use(errorController.Get404);
 
-app.listen(5001);
+Product.belongsTo(User,{constraint: true, onDelete:'CASCADE'});
+User.hasMany(Product);
+
+sequelize
+  .sync({force: true})
+  .then((result) => {
+    app.listen(5001);
+  })
+  .catch((err) => {
+    console.log(err);
+  });

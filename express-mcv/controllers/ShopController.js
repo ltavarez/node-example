@@ -2,13 +2,14 @@ const Product = require("../models/Product");
 const Cart = require("../models/Cart");
 
 exports.GetIndex = (req, res, next) => {
-  Product.GetAll()
-    .then(([rows, fieldData]) => {
+  Product.findAll()
+    .then((result) => {
+      const products = result.map((result) => result.dataValues);
       res.render("shop/index", {
         pageTitle: "Home page",
         shopActive: true,
-        prods: rows,
-        hasProducts: rows.length > 0,
+        prods: products,
+        hasProducts: products.length > 0,
       });
     })
     .catch((err) => {
@@ -50,11 +51,12 @@ exports.PostCart = (req, res, next) => {
 };
 
 exports.GetProducts = (req, res, next) => {
-  Product.GetAll()
-    .then(([rows, fieldData]) => {
+  Product.findAll()
+    .then((result) => {
+      const products = result.map((result) => result.dataValues);
       res.render("shop/product-list", {
-        prods: rows,
-        hasProducts: rows.length > 0,
+        prods: products,
+        hasProducts: products.length > 0,
         ProductsActive: true,
         pageTitle: "Products page",
       });
@@ -66,11 +68,12 @@ exports.GetProducts = (req, res, next) => {
 
 exports.GetProduct = (req, res, next) => {
   const prodId = req.params.productId;
-  Product.GetById(prodId)
-    .then(([product]) => {
+  Product.findOne({ where: { id: prodId } })
+    .then((result) => {
+      const product = result.dataValues;
       res.render("shop/product-detail", {
-        prod: product[0],
-        pageTitle: product[0].title,
+        prod: product,
+        pageTitle: product.title,
         ProductsActive: true,
       });
     })

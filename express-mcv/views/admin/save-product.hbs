@@ -2,27 +2,27 @@
   <form class="product-form" action="{{#if editMode}}/admin/edit-product{{else}}/admin/add-product{{/if}}" method="POST">
     <div class="form-control">
       <label for="title">Title:</label>
-      <input type="text" name="title" id="title" value="{{#if editMode}}{{product.Title}}{{/if}}" />
+      <input type="text" name="title" id="title" value="{{#if editMode}}{{product.title}}{{/if}}" />
     </div>
 
      <div class="form-control">
       <label for="image-url">Image Url:</label>
-      <input type="text" name="imageUrl" id="image-url" value="{{#if editMode}}{{product.ImageUrl}}{{/if}}" />
+      <input type="text" name="imageUrl" id="image-url" value="{{#if editMode}}{{product.imageUrl}}{{/if}}" />
     </div>
 
      <div class="form-control">
       <label for="price-id">Price:</label>
-      <input type="number" name="price" id="price-id" step="0.01" value="{{#if editMode}}{{product.Price}}{{/if}}" />
+      <input type="number" name="price" id="price-id" step="0.01" value="{{#if editMode}}{{product.price}}{{/if}}" />
     </div>
 
      <div class="form-control">
       <label for="description-id">Description</label>
-      <textarea name="description" id="description-id" rows="5">{{#if editMode}}{{product.Description}}{{/if}}</textarea>
+      <textarea name="description" id="description-id" rows="5">{{#if editMode}}{{product.description}}{{/if}}</textarea>
     </div>
 
     {{#if editMode}}
 
-      <input type="hidden" name="productId" value="{{product.Id}}">
+      <input type="hidden" name="productId" value="{{product.id}}">
 
     {{/if}}
 
