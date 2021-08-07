@@ -3,11 +3,11 @@
     <ul>
       {{#each products}}
         <li>
-          <p>{{this.productData.title}} {{this.qty}} </p>
+          <p>{{this.title}} {{this.cartItem.dataValues.quantity}} </p>
           <form action="/cart-delete-item" method="POST">
             <input
               type="hidden"
-              value="{{this.productData.id}}"
+              value="{{this.id}}"
               name="productId"
             />
             <button class="btn" type="submit">Delete</button>
@@ -15,6 +15,12 @@
         </li>
       {{/each}}
     </ul>
+    <div class="centered">
+         <form action="/create-order" method="POST">
+            
+            <button class="btn" type="submit">Checkout</button>
+          </form>
+    </div>
   {{else}}
     <h1>No Products in Cart!</h1>
   {{/if}}
