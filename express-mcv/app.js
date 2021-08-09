@@ -5,6 +5,7 @@ const app = express();
 
 const adminRouter = require("./routes/admin");
 const shopRouter = require("./routes/shop");
+const authRouter = require("./routes/auth");
 const errorController = require("./controllers/ErrorController");
 
 const sequelize = require("./util/database");
@@ -46,6 +47,7 @@ app.use((req, res, next) => {
 
 app.use("/admin", adminRouter);
 app.use(shopRouter);
+app.use(authRouter);
 
 app.use(errorController.Get404);
 
