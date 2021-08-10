@@ -15,6 +15,7 @@ const Cart = require("./models/Cart");
 const CartItem = require("./models/CartItem");
 const Order = require("./models/Order");
 const OrderItem = require("./models/OrderItem");
+const session = require("express-session");
 
 app.engine(
   "hbs",
@@ -34,8 +35,20 @@ app.use(
 );
 
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use(
+  session({ secret: "anything", resave: true, saveUninitialized: false })
+);
+
 app.use((req, res, next) => {
-  User.findByPk(1)
+  
+  if (!req.session) {
+    return next();
+  }
+  if (!req.session.user) {
+    return next();
+  }
+  User.findByPk(req.session.user.id)
     .then((user) => {
       req.user = user;
       next();
@@ -51,18 +64,21 @@ app.use(authRouter);
 
 app.use(errorController.Get404);
 
+
+
+
 Product.belongsTo(User, { constraint: true, onDelete: "CASCADE" });
 User.hasMany(Product);
 User.hasOne(Cart);
 Cart.belongsTo(User);
-Cart.belongsToMany(Product, {through: CartItem});
+Cart.belongsToMany(Product, { through: CartItem });
 Product.belongsToMany(Cart, { through: CartItem });
 Order.belongsTo(User);
 User.hasMany(Order);
 Order.belongsToMany(Product, { through: OrderItem });
 
 sequelize
-  .sync(  )
+  .sync()
   .then((result) => {
     return User.findByPk(1);
   })
@@ -73,8 +89,9 @@ sequelize
     return user;
   })
   .then((user) => {
-     return user.createCart();
-  }).then((cart)=>{
+    return user.createCart();
+  })
+  .then((cart) => {
     app.listen(3000);
   })
   .catch((err) => {

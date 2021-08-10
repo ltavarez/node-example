@@ -6,8 +6,11 @@
   </div>
   <h2>${{prod.price}}</h2>
   <p>{{prod.description}}</p>
+
+  {{#if isAuthenticated}}
   <form action="/cart" method="post">
     <button class="btn" type="submit">Add to Cart</button>
     <input type="hidden" name="productId" value="{{prod.id}}">
   </form>
+  {{/if}}
 </main>

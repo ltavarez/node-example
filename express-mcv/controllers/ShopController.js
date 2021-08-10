@@ -11,7 +11,7 @@ exports.GetIndex = (req, res, next) => {
         shopActive: true,
         prods: products,
         hasProducts: products.length > 0,
-        isAuthenticated: req.isLoggedIn,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -31,7 +31,7 @@ exports.GetCart = (req, res, next) => {
           pageTitle: "Your Cart",
           products: products,
           hasProducts: products.length > 0,
-          isAuthenticated: req.isLoggedIn,
+          isAuthenticated: req.session.isLoggedIn,
         });
       });
     })
@@ -79,15 +79,17 @@ exports.PostCart = (req, res, next) => {
 };
 
 exports.GetProducts = (req, res, next) => {
+  
   Product.findAll()
     .then((result) => {
       const products = result.map((result) => result.dataValues);
+      
       res.render("shop/product-list", {
         prods: products,
         hasProducts: products.length > 0,
         ProductsActive: true,
         pageTitle: "Products page",
-        isAuthenticated: req.isLoggedIn,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -104,7 +106,7 @@ exports.GetProduct = (req, res, next) => {
         prod: product,
         pageTitle: product.title,
         ProductsActive: true,
-        isAuthenticated: req.isLoggedIn,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -138,7 +140,7 @@ exports.GetCheckout = (req, res, next) => {
   res.render("shop/checkout", {
     CartActive: true,
     pageTitle: "Checkout page",
-    isAuthenticated: req.isLoggedIn,
+    isAuthenticated: req.session.isLoggedIn,
   });
 };
 
@@ -184,7 +186,7 @@ exports.GetOrders = (req, res, next) => {
         orders: orders,
         hasOrders: orders.length > 0,
         OrdersActive: true,
-        isAuthenticated: req.isLoggedIn,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => console.log(err));
