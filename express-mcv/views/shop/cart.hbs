@@ -5,6 +5,7 @@
         <li>
           <p>{{this.title}} {{this.cartItem.dataValues.quantity}} </p>
           <form action="/cart-delete-item" method="POST">
+           <input type="hidden" name="_csrf" value="{{../csrfToken}}">
             <input
               type="hidden"
               value="{{this.id}}"
@@ -17,7 +18,7 @@
     </ul>
     <div class="centered">
          <form action="/create-order" method="POST">
-            
+               <input type="hidden" name="_csrf" value="{{csrfToken}}">
             <button class="btn" type="submit">Checkout</button>
           </form>
     </div>

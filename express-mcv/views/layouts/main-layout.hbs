@@ -36,6 +36,7 @@
 
          <li class="main-header__item">
                 <form action="/logout" method="POST">
+                  <input type="hidden" name="_csrf" value="{{csrfToken}}">
                   <button type="submit">Logout</button>
                 </form>
             </li>
@@ -44,9 +45,28 @@
              <li class="main-header__item">
                 <a class="{{#if loginActive}} active {{/if}}" href="/login">Login</a>
             </li>
+               <li class="main-header__item">
+                <a class="{{#if SignupActive}} active {{/if}}" href="/signup">Signup</a>
+            </li>
             {{/if}}
         </ul>
     </header>
+
+
+    <div>
+    {{#if hasErrorMessages}} 
+    <ul>
+
+        {{#each errorMessages}}
+
+          <li>{{this}}</li>
+
+        {{/each}}
+
+    </ul>
+    
+    {{/if}}
+  </div>
 
     {{{body}}}
   </body>

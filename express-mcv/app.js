@@ -16,6 +16,10 @@ const CartItem = require("./models/CartItem");
 const Order = require("./models/Order");
 const OrderItem = require("./models/OrderItem");
 const session = require("express-session");
+const csrf = require("csurf");
+const csrfProtection = csrf();
+
+const flash = require("connect-flash");
 
 app.engine(
   "hbs",
@@ -40,8 +44,11 @@ app.use(
   session({ secret: "anything", resave: true, saveUninitialized: false })
 );
 
+app.use(csrfProtection);
+
+app.use(flash());
+
 app.use((req, res, next) => {
-  
   if (!req.session) {
     return next();
   }
@@ -58,14 +65,20 @@ app.use((req, res, next) => {
     });
 });
 
+app.use((req, res, next) => {
+  const errors = req.flash("errors");
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  res.locals.errorMessages = errors;
+  res.locals.hasErrorMessages = errors.length > 0;
+  next();
+});
+
 app.use("/admin", adminRouter);
 app.use(shopRouter);
 app.use(authRouter);
 
 app.use(errorController.Get404);
-
-
-
 
 Product.belongsTo(User, { constraint: true, onDelete: "CASCADE" });
 User.hasMany(Product);
@@ -80,18 +93,6 @@ Order.belongsToMany(Product, { through: OrderItem });
 sequelize
   .sync()
   .then((result) => {
-    return User.findByPk(1);
-  })
-  .then((user) => {
-    if (!user) {
-      return User.create({ name: "Leo", email: "leonardotv.93@gmail.com" });
-    }
-    return user;
-  })
-  .then((user) => {
-    return user.createCart();
-  })
-  .then((cart) => {
     app.listen(3000);
   })
   .catch((err) => {

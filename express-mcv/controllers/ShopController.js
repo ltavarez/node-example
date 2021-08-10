@@ -10,8 +10,7 @@ exports.GetIndex = (req, res, next) => {
         pageTitle: "Home page",
         shopActive: true,
         prods: products,
-        hasProducts: products.length > 0,
-        isAuthenticated: req.session.isLoggedIn,
+        hasProducts: products.length > 0       
       });
     })
     .catch((err) => {
@@ -30,8 +29,7 @@ exports.GetCart = (req, res, next) => {
           CartActive: true,
           pageTitle: "Your Cart",
           products: products,
-          hasProducts: products.length > 0,
-          isAuthenticated: req.session.isLoggedIn,
+          hasProducts: products.length > 0         
         });
       });
     })
@@ -88,8 +86,7 @@ exports.GetProducts = (req, res, next) => {
         prods: products,
         hasProducts: products.length > 0,
         ProductsActive: true,
-        pageTitle: "Products page",
-        isAuthenticated: req.session.isLoggedIn,
+        pageTitle: "Products page"        
       });
     })
     .catch((err) => {
@@ -105,8 +102,7 @@ exports.GetProduct = (req, res, next) => {
       res.render("shop/product-detail", {
         prod: product,
         pageTitle: product.title,
-        ProductsActive: true,
-        isAuthenticated: req.session.isLoggedIn,
+        ProductsActive: true       
       });
     })
     .catch((err) => {
@@ -139,8 +135,7 @@ exports.postCartDeleteProduct = (req, res, next) => {
 exports.GetCheckout = (req, res, next) => {
   res.render("shop/checkout", {
     CartActive: true,
-    pageTitle: "Checkout page",
-    isAuthenticated: req.session.isLoggedIn,
+    pageTitle: "Checkout page"    
   });
 };
 
@@ -185,8 +180,7 @@ exports.GetOrders = (req, res, next) => {
         pageTitle: "Your Orders",
         orders: orders,
         hasOrders: orders.length > 0,
-        OrdersActive: true,
-        isAuthenticated: req.session.isLoggedIn,
+        OrdersActive: true      
       });
     })
     .catch((err) => console.log(err));
