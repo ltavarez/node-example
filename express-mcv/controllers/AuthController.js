@@ -4,7 +4,6 @@ const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 const { Op } = require("sequelize");
 
-
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -140,23 +139,30 @@ exports.PostReset = (req, res, next) => {
       .then((user) => {
         if (!user) {
           req.flash("errors", "No account with that email found.");
-          return res.redirect("/reset");
+          return null;
         }
         user.resetToken = token;
         user.resetTokenExpiration = Date.now() + 3600000;
         return user.save();
       })
       .then((result) => {
-        res.redirect("/");
-        transporter.sendMail({
-          to: email,
-          from: "phpitladiplomado@gmail.com",
-          subject: "Password reset",
-          html: `
+
+        let urlRedirect = "/reset";
+        
+        if (result) {
+          urlRedirect = "/";
+          transporter.sendMail({
+            to: email,
+            from: "phpitladiplomado@gmail.com",
+            subject: "Password reset",
+            html: `
             <p>You requested a password reset</p>
             <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set a new password.</p>
           `,
-        });
+          });
+        }
+
+        res.redirect(urlRedirect);
       })
       .catch((err) => {
         console.log(err);
@@ -166,7 +172,12 @@ exports.PostReset = (req, res, next) => {
 
 exports.GetNewPassword = (req, res, next) => {
   const token = req.params.token;
-  User.findOne( {where: { resetToken: token, resetTokenExpiration: {[Op.gte]: Date.now() } }})
+  User.findOne({
+    where: {
+      resetToken: token,
+      resetTokenExpiration: { [Op.gte]: Date.now() },
+    },
+  })
     .then((user) => {
       let message = req.flash("error");
       if (message.length > 0) {
@@ -174,7 +185,7 @@ exports.GetNewPassword = (req, res, next) => {
       } else {
         message = null;
       }
-      res.render("auth/new-password", {       
+      res.render("auth/new-password", {
         pageTitle: "New Password",
         errorMessage: message,
         userId: user.id,
